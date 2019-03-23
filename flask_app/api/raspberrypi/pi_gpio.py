@@ -15,30 +15,55 @@ class LED:
         GPIO.setup(self.green, GPIO.OUT)
         GPIO.setup(self.blue, GPIO.OUT)
 
-        GPIO.output(self.red, 0)
-        GPIO.output(self.green, 0)
-        GPIO.output(self.blue, 0)
+        self.reset_led()
 
     def setcolor(self, data):
         color = data.get("color")
-        GPIO.cleanup()
+        self.reset_led()
 
         if color in ("red", "green", "blue"):
-            GPIO.output(self.color, 1)
+            GPIO.output(color, 1)
 
         if color == "cyan":
-            GPIO.output(self.green, 1)
-            GPIO.output(self.blue, 1)
+            self.cyan()
 
         if color == "purple":
-            GPIO.output(self.red, 1)
-            GPIO.output(self.blue, 1)
+            self.purple()
 
         if color == "yellow":
-            GPIO.output(self.red, 1)
-            GPIO.output(self.green, 1)
+            self.yellow()
+
+        if color == "white":
+            self.white()
 
         self.led_color = color
 
     def getcolor(self):
         return self.led_color
+
+    @staticmethod
+    def yellow(self):
+        GPIO.output(self.red, 1)
+        GPIO.output(self.green, 1)
+
+    @staticmethod
+    def purple(self):
+        GPIO.output(self.red, 1)
+        GPIO.output(self.blue, 1)
+
+    @staticmethod
+    def cyan(self):
+        GPIO.output(self.green, 1)
+        GPIO.output(self.blue, 1)
+
+    @staticmethod
+    def white(self):
+        GPIO.output(self.red, 1)
+        GPIO.output(self.green, 1)
+        GPIO.output(self.blue, 1)
+
+    @staticmethod
+    def reset_led(self):
+        GPIO.output(self.red, 0)
+        GPIO.output(self.green, 0)
+        GPIO.output(self.blue, 0)

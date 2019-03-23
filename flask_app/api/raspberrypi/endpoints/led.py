@@ -12,13 +12,14 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace("raspberrypi/led", description="LED Operations")
 
-led1 = LED()
-
 
 @ns.route("/")
 class LedColor(Resource):
-    @api.expect(color_arguments)
+    def __init__(self):
+        self.led_a = LED()
+
     # @api.marshal_with(set_color)
+    @api.expect(color_arguments)
     def get(self):
         """
          Get current LED color
@@ -27,14 +28,16 @@ class LedColor(Resource):
         # page = args.get("page", 1)
         # per_page = args.get("per_page", 10)
 
-        color = led1.getcolor()
+        color = self.led_a.getcolor()
         return color
 
-    @api.expect(color_arguments)
+    @api.expect(set_color)
     # @api.marshal_with(set_color)
     def post(self):
         """
          Set LED color
          """
-        led1.setcolor(request.json)
+        data = request.get_json()
+        print(data)
+        self.led_a.setcolor(data)
         return None, 201
