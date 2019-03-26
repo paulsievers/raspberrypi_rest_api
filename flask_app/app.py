@@ -1,10 +1,11 @@
 import logging.config
 import os
 
-import settings
-from api.raspberrypi.endpoints.led import ns as raspberrypi_led_namespace
-from api.restplus import api
 from flask import Blueprint, Flask
+
+from api.raspberry_pi.endpoints.led import ns as raspberrypi_led_namespace
+from flask_app import settings
+from flask_app.api.restplus import api
 
 app = Flask(__name__)
 logging_conf_path = os.path.normpath(
