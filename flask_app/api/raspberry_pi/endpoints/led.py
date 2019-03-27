@@ -1,18 +1,17 @@
 import logging
-import json
-from flask import request
 from flask_restplus import Resource
-from flask_app.api.raspberry_pi.pi_gpio import LED, LEDSchema
+from flask_app.api.raspberry_pi.pi_gpio import LED
 from flask_app.api.raspberry_pi.parsers import led_arguments
-from flask_app.api.raspberry_pi.serializers import validate_color, led_attributes
+from flask_app.api.raspberry_pi.serializers import (
+    validate_color,
+    led_attributes,
+    LEDSchema,
+)
 from flask_app.api.restplus import api
 
-led1 = LED(1)
-led2 = LED(2)
-led3 = LED(3)
-led1.color = "red"
-led2.color = "green"
-led3.color = "blue"
+led1 = LED(1, gpio_pins=[{"red": 3}, {"green": 5}, {"blue": 7}])
+led2 = LED(2, gpio_pins=[{"red": 8}, {"green": 10}, {"blue": 12}])
+led3 = LED(3, gpio_pins=[{"red": 11}, {"green": 13}, {"blue": 15}])
 leds = [led1, led2, led3]
 
 log = logging.getLogger(__name__)
@@ -34,7 +33,6 @@ class LedList(Resource):
          List LEDs
          """
         schema = LEDSchema(many=True)
-        print(type(leds))
         return schema.dump(leds)
 
 
