@@ -9,9 +9,9 @@ from flask_app.api.raspberry_pi.serializers import (
 )
 from flask_app.api.restplus import api
 
-led1 = LED(1, gpio_pins=[{"red": 3}, {"green": 5}, {"blue": 7}])
-led2 = LED(2, gpio_pins=[{"red": 8}, {"green": 10}, {"blue": 12}])
-led3 = LED(3, gpio_pins=[{"red": 11}, {"green": 13}, {"blue": 15}])
+led1 = LED(1, red_pin=3, green_pin=5, blue_pin=7)
+led2 = LED(2, red_pin=8, green_pin=10, blue_pin=12)
+led3 = LED(3, red_pin=11, green_pin=13, blue_pin=15)
 leds = [led1, led2, led3]
 
 log = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ class LedColor(Resource):
         return schema.dump(led)
 
     # @api.marshal_with(led_arguments)
-    @api.expect(validate_color)
+    @api.expect(LEDSchema)
     def put(self, id):
         """
          Set LED color

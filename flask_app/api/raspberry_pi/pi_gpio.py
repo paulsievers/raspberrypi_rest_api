@@ -6,32 +6,26 @@ OFF = 0
 
 
 @dataclass
-class GpioPins:
-    red: int
-    green: int
-    blue: int
-
-
-@dataclass
 class LED:
     # __slots__ = ["id", "red_pin", "green_pin", "blue_pin", "color"]
     id: int
-    gpio_pins: list = GpioPins
+    red_pin: int
+    green_pin: int
+    blue_pin: int
     color: str = "off"
     state: str = "off"
 
     def __post_init__(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
-        GPIO.setup(self.gpio_pins.red, GPIO.OUT)
-        GPIO.setup(self.gpio_pins.green, GPIO.OUT)
-        GPIO.setup(self.gpio_pins.blue, GPIO.OUT)
-        print(f"initialized led {self.id}")
-        pass
+        GPIO.setup(self.red_pin, GPIO.OUT)
+        GPIO.setup(self.green_pin, GPIO.OUT)
+        GPIO.setup(self.blue_pin, GPIO.OUT)
+        # print(f"initialized led {self.id}")
+        # pass
 
     def set_color(self, data):
         color = data.get("color")
-        state = data.get("state")
         self.reset_led(OFF)
 
         if color == "red":
@@ -56,17 +50,19 @@ class LED:
             self.white(ON)
 
         self.color = color
-        self.state = state
         print(self.color)
 
     def red(self, status):
-        GPIO.output(self.gpio_pins.red, status)
+        GPIO.output(self.red_pin, status)
+        # pass
 
     def green(self, status):
-        GPIO.output(self.gpio_pins.green, status)
+        GPIO.output(self.green_pin, status)
+        # pass
 
     def blue(self, status):
-        GPIO.output(self.gpio_pins.blue, status)
+        GPIO.output(self.blue_pin, status)
+        # pass
 
     def yellow(self, status):
         self.red(status)
