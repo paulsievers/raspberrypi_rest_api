@@ -1,13 +1,10 @@
 import logging
-from flask_restplus import Resource
-from flask_app.api.raspberry_pi.pi_gpio import LED
-from flask_app.api.raspberry_pi.parsers import led_arguments
-from flask_app.api.raspberry_pi.serializers import (
-    validate_color,
-    led_attributes,
-    LEDSchema,
-)
-from flask_app.api.restplus import api
+
+from flask_restplus import Namespace, Resource, fields, reqparse
+from marshmallow import Schema
+from marshmallow import fields as mm_fields
+
+from flask_app.core.pi_gpio import LED
 
 led1 = LED(1, red_pin=3, green_pin=5, blue_pin=7)
 led2 = LED(2, red_pin=8, green_pin=10, blue_pin=12)
@@ -16,7 +13,33 @@ leds = [led1, led2, led3]
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace("raspberry-pi/led", description="LED Operations")
+api = Namespace("raspberry-pi/led", description="LED Operations")
+
+
+class LEDSchema(Schema):
+    id = mm_fields.Integer()
+    color = mm_fields.String()
+    state = mm_fields.String()
+    # gpio_pins = mm_fields.List(mm_fields.Dict())
+
+
+validate_color = api.model(
+    "LED",
+    {
+        "color": fields.String(required=True, example="red", description="LED Color"),
+        "state": fields.String(example="solid", description="['solid', 'blink']"),
+    },
+)
+
+led_attributes = api.inherit(
+    "LED attributes",
+    validate_color,
+    {"id": fields.Integer(readOnly=True, description="LED Number")},
+)
+
+
+led_arguments = reqparse.RequestParser()
+led_arguments.add_argument("id", type=int, choices=[1, 2, 3])
 
 
 def set_led(id):
@@ -26,7 +49,7 @@ def set_led(id):
             return led
 
 
-@ns.route("/")
+@api.route("/")
 class LedList(Resource):
     def get(self):
         """
@@ -36,7 +59,7 @@ class LedList(Resource):
         return schema.dump(leds)
 
 
-@ns.route("/<int:id>")
+@api.route("/<int:id>")
 class LedColor(Resource):
     # @api.expect(led_arguments)
     def get(self, id):

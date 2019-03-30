@@ -6,9 +6,12 @@ name = "pypi"
 [packages]
 flask-restplus = "*"
 marshmallow = "*"
+gunicorn = "*"
 
 [dev-packages]
 flake8 = "*"
+pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"

@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 from dataclasses import dataclass
 
 ON = 1
@@ -16,13 +16,12 @@ class LED:
     state: str = "off"
 
     def __post_init__(self):
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setwarnings(False)
-        GPIO.setup(self.red_pin, GPIO.OUT)
-        GPIO.setup(self.green_pin, GPIO.OUT)
-        GPIO.setup(self.blue_pin, GPIO.OUT)
-        # print(f"initialized led {self.id}")
-        # pass
+        # GPIO.setmode(GPIO.BOARD)
+        # GPIO.setwarnings(False)
+        # GPIO.setup(self.red_pin, GPIO.OUT)
+        # GPIO.setup(self.green_pin, GPIO.OUT)
+        # GPIO.setup(self.blue_pin, GPIO.OUT)
+        pass
 
     def set_color(self, data):
         color = data.get("color")
@@ -53,16 +52,16 @@ class LED:
         print(self.color)
 
     def red(self, status):
-        GPIO.output(self.red_pin, status)
-        # pass
+        # GPIO.output(self.red_pin, status)
+        pass
 
     def green(self, status):
-        GPIO.output(self.green_pin, status)
-        # pass
+        # GPIO.output(self.green_pin, status)
+        pass
 
     def blue(self, status):
-        GPIO.output(self.blue_pin, status)
-        # pass
+        # GPIO.output(self.blue_pin, status)
+        pass
 
     def yellow(self, status):
         self.red(status)
