@@ -4,7 +4,7 @@ from flask_restplus import Namespace, Resource, fields, reqparse
 from marshmallow import Schema
 from marshmallow import fields as mm_fields
 
-from flask_app.core.pi_gpio import LED
+from raspberrypi_rest_api.core.gpio import LED
 
 led1 = LED(1, red_pin=3, green_pin=5, blue_pin=7)
 led2 = LED(2, red_pin=8, green_pin=10, blue_pin=12)

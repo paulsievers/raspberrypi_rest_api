@@ -3,13 +3,15 @@ import os
 
 from flask import Flask
 
-# from api.raspberry_pi.endpoints.led import ns as raspberrypi_led_namespace
-from flask_app import settings
-
-# from flask_app.api.restplus import api
-from flask_app.api import blueprint as api
+from raspberrypi_rest_api import settings
+from raspberrypi_rest_api.api import blueprint as api
 
 app = Flask(__name__)
+app.config["SERVER_NAME"] = settings.FLASK_SERVER_NAME
+app.config["SWAGGER_UI_DOC_EXPANSION"] = settings.RESTPLUS_SWAGGER_UI_DOC_EXPANSION
+app.config["RESTPLUS_VALIDATE"] = settings.RESTPLUS_VALIDATE
+app.config["RESTPLUS_MASK_SWAGGER"] = settings.RESTPLUS_MASK_SWAGGER
+app.config["ERROR_404_HELP"] = settings.RESTPLUS_ERROR_404_HELP
 app.register_blueprint(api, url_prefix="/api")
 
 logging_conf_path = os.path.normpath(
