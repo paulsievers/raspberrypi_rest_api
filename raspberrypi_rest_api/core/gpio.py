@@ -13,7 +13,7 @@ class LED:
     green_pin: int
     blue_pin: int
     color: str = "off"
-    state: str = "off"
+    mode: str = "off"
 
     def __post_init__(self):
         # GPIO.setmode(GPIO.BOARD)
@@ -49,7 +49,6 @@ class LED:
             self.white(ON)
 
         self.color = color
-        print(self.color)
 
     def red(self, status):
         # GPIO.output(self.red_pin, status)
@@ -85,4 +84,4 @@ class LED:
         self.green(status)
         self.blue(status)
         self.color = "off"
-        self.state = "off"
+        self.mode = "solid"

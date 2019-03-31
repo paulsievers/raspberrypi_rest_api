@@ -18,8 +18,8 @@ api = Namespace("raspberry-pi/led", description="LED Operations")
 
 class LEDSchema(Schema):
     id = mm_fields.Integer()
-    color = mm_fields.String()
     state = mm_fields.String()
+    mode = mm_fields.String()
     # gpio_pins = mm_fields.List(mm_fields.Dict())
 
 
@@ -27,7 +27,7 @@ validate_color = api.model(
     "LED",
     {
         "color": fields.String(required=True, example="red", description="LED Color"),
-        "state": fields.String(example="solid", description="['solid', 'blink']"),
+        "mode": fields.String(example="solid", description="['solid', 'blink']"),
     },
 )
 
@@ -70,14 +70,12 @@ class LedColor(Resource):
         led = set_led(id)
         return schema.dump(led)
 
-    # @api.marshal_with(led_arguments)
-    @api.expect(LEDSchema)
+    @api.expect(validate_color)
+    @api.marshal_with(led_attributes)
     def put(self, id):
         """
          Set LED color
          """
-        schema = LEDSchema()
-        new_color = schema.load(api.payload)
         led = set_led(id)
         led.set_color(api.payload)
-        return None, 201
+        return led, 200

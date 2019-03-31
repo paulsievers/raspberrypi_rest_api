@@ -12,6 +12,8 @@ gunicorn = "*"
 flake8 = "*"
 pylint = "*"
 black = "*"
+pytest = "*"
+pytest-flask = "*"
 
 [requires]
 python_version = "3.7"

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restplus import Api
 
-from raspberrypi_rest_api.api.raspberry_pi.led import api as raspberrypi_led
+from .led import api as raspberrypi_led
 
 blueprint = Blueprint("api", __name__)
 
