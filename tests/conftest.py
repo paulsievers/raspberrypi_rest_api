@@ -8,6 +8,19 @@ from flask.testing import FlaskClient
 
 import flask_restplus as restplus
 
+from raspberrypi_rest_api import app
+
+
+# @pytest.fixture
+# def client(request):
+#     test_client = app.test_client()
+
+#     def teardown():
+#         pass  # databases and resourses have to be freed at the end. But so far we don't have anything
+
+#     request.addfinalizer(teardown)
+#     return test_client
+
 
 class TestClient(FlaskClient):
     def get_json(self, url, status=200, **kwargs):
@@ -30,8 +43,8 @@ class TestClient(FlaskClient):
 
 
 @pytest.fixture
-def app():
-    app = Flask(__name__)
+def app(app):
+    # app = Flask(__name__)
     app.test_client_class = TestClient
     yield app
 
@@ -53,18 +66,18 @@ def api(request, app):
     yield api
 
 
-# @pytest.fixture(autouse=True)
-# def _push_custom_request_context(request):
-#     app = request.getfuncargvalue("app")
-#     options = request.keywords.get("request_context")
+@pytest.fixture(autouse=True)
+def _push_custom_request_context(request):
+    app = request.getfixturevalue("app")
+    options = request.keywords.get("request_context")
 
-#     if options is None:
-#         return
+    if options is None:
+        return
 
-#     ctx = app.test_request_context(*options.args, **options.kwargs)
-#     ctx.push()
+    ctx = app.test_request_context(*options.args, **options.kwargs)
+    ctx.push()
 
-#     def teardown():
-#         ctx.pop()
+    def teardown():
+        ctx.pop()
 
-#     request.addfinalizer(teardown)
+    request.addfinalizer(teardown)
