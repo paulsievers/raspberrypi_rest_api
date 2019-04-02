@@ -18,7 +18,7 @@ api = Namespace("raspberry-pi/led", description="LED Operations")
 
 class LEDSchema(Schema):
     id = mm_fields.Integer()
-    state = mm_fields.String()
+    color = mm_fields.String()
     mode = mm_fields.String()
     # gpio_pins = mm_fields.List(mm_fields.Dict())
 
@@ -77,5 +77,7 @@ class LedColor(Resource):
          Set LED color
          """
         led = set_led(id)
+        print(type(api.payload))
+        print(api.payload)
         led.set_color(api.payload)
         return led, 200

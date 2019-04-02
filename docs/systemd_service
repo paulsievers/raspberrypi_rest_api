@@ -1,0 +1,22 @@
+`/etc/systemd/system/raspberrypi_rest_api.service`
+
+```
+[Unit]
+Description=Gunicorn instance to serve raspberrypi_rest_api
+After=network.target
+
+[Service]
+User=pi
+Group=www-data
+WorkingDirectory=/home/pi/raspberrypi_rest_api
+Environment="PATH=/home/pi/.local/share/virtualenvs/raspberrypi_rest_api-lcJzVQCC/bin"
+ExecStart=/home/pi/.local/share/virtualenvs/raspberrypi_rest_api-lcJzVQCC/bin/gunicorn --workers 4 --bind unix:raspberrypi_rest_api.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+sudo systemctl start raspberrypi_rest_api
+sudo systemctl enable raspberrypi_rest_api
+```

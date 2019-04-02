@@ -1,0 +1,24 @@
+`/etc/nginx/sites-available/raspberrypi_rest_api`
+
+server {
+    listen 80;
+    server_name 0.0.0.0;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/pi/raspberrypi_rest_api/raspberrypi_rest_api.sock;
+    }
+}
+
+Link the file to sites-enabled
+
+`sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled`
+
+Check for syntax errors
+
+`sudo nginx -t`
+
+Restart nginx
+
+`sudo systemctl restart nginx`
+
