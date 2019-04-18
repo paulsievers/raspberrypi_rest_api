@@ -5,6 +5,7 @@ from flask import Flask
 
 from raspberrypi_rest_api import settings
 from raspberrypi_rest_api.api import blueprint as api
+from raspberrypi_rest_api.tasks import make_celery
 
 app = Flask(__name__)
 # app.config["SERVER_NAME"] = settings.FLASK_SERVER_NAME
@@ -12,6 +13,10 @@ app.config["SWAGGER_UI_DOC_EXPANSION"] = settings.RESTPLUS_SWAGGER_UI_DOC_EXPANS
 app.config["RESTPLUS_VALIDATE"] = settings.RESTPLUS_VALIDATE
 app.config["RESTPLUS_MASK_SWAGGER"] = settings.RESTPLUS_MASK_SWAGGER
 app.config["ERROR_404_HELP"] = settings.RESTPLUS_ERROR_404_HELP
+
+app.config.update(CELERY_BROKER_URL="pyamqp://guest@localhost//")
+celery = make_celery(app)
+
 app.register_blueprint(api, url_prefix="/api")
 
 logging_conf_path = os.path.normpath(

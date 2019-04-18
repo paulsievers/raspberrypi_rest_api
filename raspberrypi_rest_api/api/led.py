@@ -77,7 +77,5 @@ class LedColor(Resource):
          Set LED color
          """
         led = set_led(id)
-        print(type(api.payload))
-        print(api.payload)
         led.set_color(api.payload)
         return led, 200

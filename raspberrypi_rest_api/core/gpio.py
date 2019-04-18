@@ -2,6 +2,7 @@ from time import sleep
 
 import RPi.GPIO as GPIO
 from dataclasses import dataclass
+from raspberrypi_rest_api.app import celery
 
 ON = 1
 OFF = 0
@@ -23,15 +24,19 @@ class LED:
         GPIO.setup(self.green_pin, GPIO.OUT)
         GPIO.setup(self.blue_pin, GPIO.OUT)
 
+    @celery.task()
+    def blink(self):
+        while True:
+            self.color_func(ON)
+            sleep(1)
+            self.color_func(OFF)
+            sleep(1)
+
     def set_mode(self, mode):
         if mode == "solid":
             self.color_func(ON)
         if mode == "blink":
-            while True:
-                self.color_func(ON)
-                sleep(1)
-                self.color_func(OFF)
-                sleep(1)
+            self.blink.delay()
 
     def set_color(self, data):
         color = data.get("color")
@@ -42,7 +47,6 @@ class LED:
         if color == "red":
             self.color_func = self.red
             self.set_mode(mode)
-            # self.red(ON)
 
         if color == "green":
             self.color_func = self.green
