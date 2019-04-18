@@ -1,8 +1,11 @@
 from time import sleep
 
+from celery import Celery
+
 import RPi.GPIO as GPIO
 from dataclasses import dataclass
-from raspberrypi_rest_api.app import celery
+
+celery_app = Celery("tasks", broker="pyamqp://guest@localhost//")
 
 ON = 1
 OFF = 0
@@ -24,7 +27,7 @@ class LED:
         GPIO.setup(self.green_pin, GPIO.OUT)
         GPIO.setup(self.blue_pin, GPIO.OUT)
 
-    @celery.task()
+    @celery_app.task()
     def blink(self):
         while True:
             self.color_func(ON)
