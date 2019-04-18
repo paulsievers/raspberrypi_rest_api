@@ -1,3 +1,5 @@
+from time import sleep
+
 import RPi.GPIO as GPIO
 from dataclasses import dataclass
 
@@ -21,32 +23,50 @@ class LED:
         GPIO.setup(self.green_pin, GPIO.OUT)
         GPIO.setup(self.blue_pin, GPIO.OUT)
 
+    def set_mode(self, mode):
+        if mode == "solid":
+            self.color_func(ON)
+        if mode == "blink":
+            while True:
+                self.color_func(ON)
+                sleep(1)
+                self.color_func(OFF)
+                sleep(1)
+
     def set_color(self, data):
         color = data.get("color")
+        mode = data.get("mode")
         self.reset_led(OFF)
+        self.color = color
 
         if color == "red":
-            self.red(ON)
+            self.color_func = self.red()
+            self.set_mode(mode)
+            # self.red(ON)
 
         if color == "green":
-            self.green(ON)
+            self.color_func = self.green()
+            self.set_mode(mode)
 
         if color == "blue":
-            self.blue(ON)
+            self.color_func = self.blue()
+            self.set_mode(mode)
 
         if color == "cyan":
-            self.cyan(ON)
+            self.color_func = self.cyan()
+            self.set_mode(mode)
 
         if color == "purple":
-            self.purple(ON)
+            self.color_func = self.purple()
+            self.set_mode(mode)
 
         if color == "yellow":
-            self.yellow(ON)
+            self.color_func = self.yellow()
+            self.set_mode(mode)
 
         if color == "white":
-            self.white(ON)
-
-        self.color = color
+            self.color_func = self.white()
+            self.set_mode(mode)
 
     def red(self, status):
         GPIO.output(self.red_pin, status)
