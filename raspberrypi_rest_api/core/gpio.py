@@ -40,32 +40,32 @@ class LED:
         self.color = color
 
         if color == "red":
-            self.color_func = self.red()
+            self.color_func = self.red
             self.set_mode(mode)
             # self.red(ON)
 
         if color == "green":
-            self.color_func = self.green()
+            self.color_func = self.green
             self.set_mode(mode)
 
         if color == "blue":
-            self.color_func = self.blue()
+            self.color_func = self.blue
             self.set_mode(mode)
 
         if color == "cyan":
-            self.color_func = self.cyan()
+            self.color_func = self.cyan
             self.set_mode(mode)
 
         if color == "purple":
-            self.color_func = self.purple()
+            self.color_func = self.purple
             self.set_mode(mode)
 
         if color == "yellow":
-            self.color_func = self.yellow()
+            self.color_func = self.yellow
             self.set_mode(mode)
 
         if color == "white":
-            self.color_func = self.white()
+            self.color_func = self.white
             self.set_mode(mode)
 
     def red(self, status):
